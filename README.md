@@ -48,17 +48,20 @@ Rakenduse töötamiseks on vajalik järgmine tarkvara:
      ```
 ---
 
-### 4. **Rakenduse käivitamine**
+### 4. **Algandmete baasi tekitamine**
+- Juurkaustas asub fail `seed_data.py`
+- Käivita järgmine käsk, et tekitada algandmed baasi:
+  ```bash
+  python seed_data.py
+  ```
+---
+
+
+### 5. **Rakenduse käivitamine**
 **Käivita käsk**:
    ```bash
    flask run
    ```
    Rakendus on nüüd kättesaadav [http://127.0.0.1:5000](http://127.0.0.1:5000).
-
----
-
-### 5. **Kujundus**
-- Kõik CSS-failid asuvad kataloogis `static/css/`.
-- HTML-failid asuvad kataloogis `templates/` ja kasutavad Flaski `Jinja2` mallimootorit.
 
 ---
