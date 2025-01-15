@@ -1,0 +1,59 @@
+<div id="shareholder-form" class="border rounded p-3 mt-4">
+    <h5 class="text-center custom-title">Lisa uus osanik</h5>
+    <div id="error-alert-container" class="mb-3"></div>
+
+    <!-- Osaniku tüüp -->
+    <div class="row g-2 mb-3">
+        <div class="col">
+            <label for="shareholder-type" class="form-label fw-semibold">Osaniku tüüp</label>
+            <select class="form-select modern-input" id="shareholder-type">
+                <option value="individual">Füüsiline isik</option>
+                <option value="legal">Juriidiline isik</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Füüsilise isiku väljad -->
+    <div class="individual-fields">
+        <div class="row g-2 mb-2">
+            <div class="col">
+                <label for="first_name" class="form-label fw-semibold">Eesnimi *</label>
+                <input type="text" class="form-control modern-input" id="first_name" placeholder="Sisesta eesnimi">
+            </div>
+            <div class="col">
+                <label for="last_name" class="form-label fw-semibold">Perekonnanimi *</label>
+                <input type="text" class="form-control modern-input" id="last_name" placeholder="Sisesta perekonnanimi">
+            </div>
+        </div>
+        <div class="mb-2">
+            <label for="personal_code" class="form-label fw-semibold">Isikukood *</label>
+            <input type="text" class="form-control modern-input" id="personal_code" placeholder="Sisesta isikukood" maxlength="11">
+        </div>
+    </div>
+
+    <!-- Juriidilise isiku väljad -->
+    <div class="legal-fields d-none">
+        <div class="mb-2">
+            <label for="company_name" class="form-label fw-semibold">Ärinimi *</label>
+            <input type="text" class="form-control modern-input" id="company_name" placeholder="Sisesta ärinimi">
+        </div>
+        <div class="mb-2">
+            <label for="legal_registry_code" class="form-label fw-semibold">Registrikood *</label>
+            <input type="text" class="form-control modern-input" id="legal_registry_code" placeholder="Sisesta registrikood">
+        </div>
+    </div>
+
+    <!-- Osa suurus -->
+    <div class="mb-3">
+        <label for="share" class="form-label fw-semibold">Osa suurus (€) *</label>
+        <input type="number" class="form-control modern-input" id="share" placeholder="Sisesta osa suurus">
+        <small class="text-muted">Osa suurus on miinimum 1€.</small>
+    </div>
+
+    <!-- Kinnita nupp -->
+    <div class="d-grid">
+        <button type="button" class="confirm-button" id="confirm-shareholder">
+            <i class="bi bi-check-circle"></i> Kinnita
+        </button>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h4>Muutmine: {{ company.name }} ({{ company.registry_code }})</h4>
+    <h5 class="text-muted">Kogukapital: {{ company.total_capital }} €</h5>
+    <form method="POST">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Nimi</th>
+                <th>Osaniku tüüp</th>
+                <th>Isikukood / Registrikood</th>
+                <th>Osa suurus</th>
+                <th>Asutaja</th>
+            </tr>
+            </thead>
+            <tbody id="shareholders-body">
+            {% for shareholder in form.shareholders %}
+            <tr>
+                <!-- Nimi -->
+                <td>
+                    {{ shareholder.first_name and shareholder.last_name and
+                    (shareholder.first_name ~ " " ~
+                    shareholder.last_name) or
+                    shareholder.company_name }}
+                </td>
+
+                <!-- Osaniku tüüp -->
+                <td>
+                    {% if shareholder.first_name and shareholder.last_name and not shareholder.company_name %}
+                    Füüsiline isik
+                    {% else %}
+                    Juriidiline isik
+                    {% endif %}
+                </td>
+
+                <!-- Isikukood / Registrikood -->
+                <td>
+                    {{ shareholder.personal_code if shareholder.personal_code else
+                    shareholder.registry_code }}
+                </td>
+
+                <td><input type="number" value="{{ shareholder.share }}"
+                           class="form-control"></td>
+                <td><input type="checkbox" {% if shareholder.is_founder
+                           %}checked{% endif %}></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="mt-3">
+            {{ form.submit(class="save-button") }}
+        </div>
+    </form>
+    {% include "shareholder_form.html" %}
+    <a href="{{ url_for('main.company_details', company_id=company.id) }}" class="btn btn-secondary mt-3">Tagasi</a>
+</div>
+<script src="{{ url_for('static', filename='js/shareholder_edit_form.js') }}"></script>
+{% endblock %}
+

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="container mt-3 ">
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Sulge"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header custom-header text-white">
+            <h2 class="card-title">Lisa uus osaühing ja osanikud</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" class="needs-validation" novalidate>
+
+                <!-- Firma nimi -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ form.name.label }}</label>
+                    {{ form.name(class="form-control") }}
+                    <small class="text-muted">3 kuni 100 tähte või numbrit.</small>
+
+                    {% for error in form.name.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <!-- Registrikood -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ form.registry_code.label }}</label>
+                    {{ form.registry_code(class="form-control") }}
+
+                    {% for error in form.registry_code.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <!-- Asutamiskuupäev -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ form.established_date.label }}</label>
+                    {{ form.established_date(class="form-control") }}
+
+                    {% for error in form.established_date.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <!-- Kogukapital -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ form.capital.label }}</label>
+                    {{ form.capital(class="form-control") }}
+                    <small class="text-muted">Kogukapitali miinimum suurus on 2500€.</small>
+
+                    {% for error in form.capital.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <h3 class="mt-4 custom-title">Osanikud</h3>
+
+                <!-- Osanikke tabel -->
+                <table class="table mt-4" id="shareholders-table">
+                    <thead>
+                    <tr>
+                        <th>Osaniku tüüp</th>
+                        <th>Eesnimi</th>
+                        <th>Perekonnanimi</th>
+                        <th>Ärinimi</th>
+                        <th>Registrikood</th>
+                        <th>Isikukood</th>
+                        <th>Osa suurus (€)</th>
+                        <th>Asutaja</th>
+                        <th>Tegevused</th>
+                    </tr>
+                    </thead>
+                    <tbody id="shareholders-body">
+
+                    {% if form.shareholders %}
+                    {% for shareholder in form.shareholders %}
+                    <tr>
+                        {{ shareholder.hidden_tag() }}
+                        <td>
+                            <select class="form-select shareholder-type" name="{{ shareholder.is_individual.name }}">
+                                <option value="individual" {% if shareholder.is_individual.data==
+                                'individual' %}selected{% endif %}>
+                                Füüsiline isik
+                                </option>
+                                <option value="legal" {% if shareholder.is_individual.data==
+                                'legal' %}selected{% endif %}>
+                                Juriidiline isik
+                                </option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control" name="{{ shareholder.first_name.name }}"
+                                   value="{{ shareholder.first_name.data or '' }}"
+                                   {% if shareholder.is_individual.data !='individual' %}disabled{% endif %}>
+                            {% for error in shareholder.first_name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </td>
+                        <td><input type="text" class="form-control" name="{{ shareholder.last_name.name }}"
+                                   value="{{ shareholder.last_name.data or '' }}"
+                                   {% if shareholder.is_individual.data !='individual' %}disabled{% endif %}>
+                            {% for error in shareholder.last_name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </td>
+                        <td><input type="text" class="form-control" name="{{ shareholder.company_name.name }}"
+                                   value="{{ shareholder.company_name.data or '' }}"
+                                   {% if shareholder.is_individual.data !='legal' %}disabled{% endif %}>
+                            {% for error in shareholder.company_name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </td>
+                        <td><input type="text" class="form-control" name="{{ shareholder.registry_code.name }}"
+                                   value="{{ shareholder.registry_code.data or '' }}"
+                                   {% if shareholder.is_individual.data !='legal' %}disabled{% endif %}>
+                            {% for error in shareholder.registry_code.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </td>
+                        <td><input type="text" class="form-control" name="{{ shareholder.personal_code.name }}"
+                                   value="{{ shareholder.personal_code.data or '' }}"
+                                   {% if shareholder.is_individual.data !='individual' %}disabled{% endif %}>
+                            {% for error in shareholder.personal_code.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </td>
+                        <td><input type="number" class="form-control" name="{{ shareholder.share.name }}"
+                                   value="{{ shareholder.share.data }}"></td>
+                        <td><input type="checkbox" name="{{ shareholder.is_founder.name }}"
+                                   {% if shareholder.is_founder.data %}checked{% endif %}></td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm remove-row">Eemalda</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+
+                </table>
+
+
+                {% include "shareholder_form.html" %}
+
+                <div class="mt-3">
+                    {{ form.submit(class="save-button") }}
+                </div>
+            </form>
+        </div>
+    </div>
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary mt-3">Tagasi avalehele</a>
+</div>
+<script src="{{ url_for('static', filename='js/shareholder_form.js') }}"></script>
+{% endblock %}

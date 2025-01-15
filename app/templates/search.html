@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Otsingutulemused</h2>
+
+    <!-- Tegevused ja filtreerimine kaardis -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <!-- Vaadete nupud -->
+            <div></div>
+            <div class="d-flex align-items-center">
+                <select id="sortOptions" class="form-select d-inline w-auto me-2">
+                    <option selected>Järjestus</option>
+                    <option value="name_asc">Nimi (kasvav)</option>
+                    <option value="name_desc">Nimi (kahanev)</option>
+                    <option value="registry-asc">Registrikood (kasvav)</option>
+                    <option value="registry-desc">Registrikood (kahanev)</option>
+                    <option value="capital-asc">Kogukapital (kasvav)</option>
+                    <option value="capital-desc">Kogukapital (kahanev)</option>
+                </select>
+                <button id="filter-button" class="btn btn-outline-secondary me-2"><i class="bi bi-funnel"></i> Filtreeri
+                </button>
+                <button id="pdf-button" class="btn btn-outline-secondary me-2"><i
+                        class="bi bi-file-earmark-arrow-down"></i> PDF
+                </button>
+
+                <button id="print-button" class="btn btn-outline-secondary"><i class="bi bi-printer"></i> Prindi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Otsingutulemuste kaardid -->
+    {% if results %}
+    <div class="row g-4" id="cardsContainer">
+        {% for company in results %}
+        <div class="col-md-6 col-lg-4 card-item">
+            <div class="card res_card h-100 shadow-lg border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary fw-bold mb-3">
+                        <a href="{{ url_for('main.company_details', company_id=company.id) }}"
+                           class="text-decoration-none">
+                            <strong>{{ company.name }}</strong>
+                        </a>
+                    </h5>
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="bi bi-hash"></i>Registrikood: <strong> {{ company.registry_code
+                            }}</strong></li>
+                        <li class="mb-2"><i class="bi bi-calendar-event"></i>Asutamiskuupäev: <strong> {{
+                            company.established_date }}</strong></li>
+                        <li><i class="bi bi-cash-stack"></i>Kogukapital: <strong> €{{ company.total_capital }}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> Tulemusi ei leitud.
+    </div>
+    {% endif %}
+
+
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary mt-4">
+        <i class="bi bi-arrow-left"></i> Tagasi avalehele
+    </a>
+</div>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}
