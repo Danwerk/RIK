@@ -1,4 +1,4 @@
-from app import db
+from app import db, create_app
 from app.models import Company, Shareholder
 from datetime import date
 def seed_data():
@@ -24,3 +24,8 @@ def seed_data():
     db.session.add_all([shareholder1, shareholder2, shareholder3, shareholder4])
     db.session.commit()
     print("Andmed edukalt lisatud!")
+
+if __name__ == '__main__':
+    app = create_app()
+    with app.app_context():
+        seed_data()

@@ -23,10 +23,4 @@ def create_app():
 
     from app import models
 
-    with app.app_context():
-        # to avoid circular reference
-        from app.seed_data import seed_data
-        from app.models import Company
-        if not Company.query.first():
-            seed_data()
     return app
